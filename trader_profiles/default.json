@@ -1,0 +1,134 @@
+{
+  "name": "apb",
+  "experience_level": "Beginner",
+  "trading_style": "Swing Trader",
+  "risk_profile": "Aggressive",
+  "asset_classes": [
+    "US Stocks",
+    "ETFs"
+  ],
+  "sectors_of_interest": [
+    "Technology"
+  ],
+  "watchlist": [
+    "USD/JPY",
+    "EUR/USD",
+    "GBP/USD",
+    "AUD/USD",
+    "USD/CAD",
+    "JPM",
+    "BAC",
+    "GS",
+    "MS",
+    "BLK",
+    "SCHW"
+  ],
+  "preferred_indicators": [
+    "RSI",
+    "MACD",
+    "Moving Averages (SMA/EMA)"
+  ],
+  "trading_goals": [
+    "Quick profits (short-term trades)"
+  ],
+  "news_preferences": [
+    "Earnings reports",
+    "Fed/Central bank decisions"
+  ],
+  "portfolio_size": 10000.0,
+  "time_horizon": "Swing (Days-Weeks)",
+  "current_holdings": "",
+  "model_sensitivity": "Medium (Balanced)",
+  "notification_rules": {
+    "price_alerts": true,
+    "regime_change": true,
+    "model_signals": true,
+    "news_impact": true
+  },
+  "capital_range": "Under $1,000",
+  "max_loss_per_trade_pct": 5.0,
+  "profit_target_pct": 10.0,
+  "preferred_session": "US Market Hours (9:30-16:00 ET)",
+  "alerts_enabled": true,
+  "show_advanced_metrics": true,
+  "dark_pool_alerts": true,
+  "options_greeks": true,
+  "ai_commentary_style": "aggressive",
+  "created_at": "2026-02-16T13:04:28.709132",
+  "updated_at": "2026-02-21T10:05:23.213161",
+  "interaction_count": 18,
+  "queries_history": [
+    {
+      "query": "Is AAPL trending bearish?",
+      "timestamp": "2026-02-16T13:04:28.709125"
+    },
+    {
+      "query": "what are some healthcare tickers that seem bullish",
+      "timestamp": "2026-02-16T13:04:46.108178"
+    },
+    {
+      "query": "give 3 tickers, specifically in the healthcare tickers that could sneakily be bullish (might be awaiting approval, etc.)?",
+      "timestamp": "2026-02-16T13:06:12.674990"
+    },
+    {
+      "query": "what are 3 emerging and sneaky bullish stocks in the healthcare sector",
+      "timestamp": "2026-02-16T16:02:09.718502"
+    },
+    {
+      "query": "what are 3 emerging and sneaky bullish stocks in the REM sector\n\n",
+      "timestamp": "2026-02-16T16:10:11.803247"
+    },
+    {
+      "query": "what about minerals",
+      "timestamp": "2026-02-16T16:12:02.732912"
+    },
+    {
+      "query": "what are 3 emerging and sneaky bullish stocks in the REM sector\n\n",
+      "timestamp": "2026-02-16T16:19:41.081774"
+    },
+    {
+      "query": "what are 3 emerging and sneaky bullish stocks in the REM /minerals sector\n\n",
+      "timestamp": "2026-02-16T16:19:58.855535"
+    },
+    {
+      "query": "what are 3 emerging and sneaky bullish stocks in the gold sector\n\n",
+      "timestamp": "2026-02-16T16:34:38.455940"
+    },
+    {
+      "query": "which has the most potential for returns on a short position META or AAPL",
+      "timestamp": "2026-02-16T16:35:43.683292"
+    },
+    {
+      "query": "which has the most potential for returns on a short position META or AAPL",
+      "timestamp": "2026-02-16T16:41:05.870086"
+    },
+    {
+      "query": "how is market looking today",
+      "timestamp": "2026-02-18T16:39:36.586226"
+    },
+    {
+      "query": "give me a market outlook for today",
+      "timestamp": "2026-02-18T16:45:34.702444"
+    },
+    {
+      "query": "give a market out look for today",
+      "timestamp": "2026-02-18T16:49:59.388212"
+    },
+    {
+      "query": "what are some stocks with a possible explosion in share price",
+      "timestamp": "2026-02-18T16:50:22.744200"
+    },
+    {
+      "query": "what are some stock with possible explosion in share price?",
+      "timestamp": "2026-02-18T16:50:50.111482"
+    },
+    {
+      "query": "how is the central bank of Japans interest rate affecting the USD/JPY price",
+      "timestamp": "2026-02-21T10:04:38.924166"
+    },
+    {
+      "query": "what way is USD/JPY trending and craft a possible trade scenario that would be optimal for USD/JPY",
+      "timestamp": "2026-02-21T10:05:23.213144"
+    }
+  ]
+}
