@@ -60,6 +60,8 @@ nav_options = [
     "Financial Model Generator",
     "Daily Briefing",
     "Quant Terminal",
+    "Strategy Research Lab",
+    "Quant Modeling Lab",
     "Paper Trading",
     "Simulation Hub",
     "Trader Profile",
@@ -616,11 +618,11 @@ elif selection == "Intelligence Center":
                         "Fundamental Score": round(n.fundamental_score, 1),
                         "Divergence": round(n.divergence, 1),
                         "Status": (
-                            "🔴 OVERCROWDED"
+                            "OVERCROWDED"
                             if n.divergence >= 18
-                            else "🟢 UNDERHYPED"
+                            else "UNDERHYPED"
                             if n.divergence <= -18
-                            else "⚪ FAIR"
+                            else "FAIR"
                         ),
                     }
                     for n in narratives
@@ -1582,7 +1584,7 @@ elif selection == "Daily Briefing":
                     st.markdown(
                         f"<div style='background:#1f1015;border-left:3px solid #ff4444;"
                         f"border-radius:4px;padding:7px 10px;margin:3px 0;font-size:0.8rem;color:#ffaaaa;'>"
-                        f"⚠ {risk}</div>",
+                        f"[!] {risk}</div>",
                         unsafe_allow_html=True,
                     )
                 st.markdown("#### Key Opportunities")
@@ -1591,7 +1593,7 @@ elif selection == "Daily Briefing":
                         st.markdown(
                             f"<div style='background:#101f15;border-left:3px solid #00ff88;"
                             f"border-radius:4px;padding:7px 10px;margin:3px 0;font-size:0.8rem;color:#aaffcc;'>"
-                            f"✦ {opp[:120]}</div>",
+                            f"+ {opp[:120]}</div>",
                             unsafe_allow_html=True,
                         )
 
@@ -1635,7 +1637,7 @@ elif selection == "Daily Briefing":
                             "RSI": f"{d.get('rsi', 50):.0f}",
                             "MACD": d.get("macd", "—"),
                             "BB Position": d.get("bb_pos", "—"),
-                            "Above 200MA": "✓" if above else "✗",
+                            "Above 200MA": "YES" if above else "NO",
                         }
                     )
                 df_idx = pd.DataFrame(rows)
@@ -1920,8 +1922,8 @@ elif selection == "Daily Briefing":
                             "Vol": f"{d.get('vol', 0):.1f}%",
                             "RSI": f"{d.get('rsi', 50):.0f}",
                             "MACD": d.get("macd", "—"),
-                            ">50MA": "✓" if d.get("above_50") else "✗",
-                            ">200MA": "✓" if d.get("above_200") else "✗",
+                            ">50MA": "YES" if d.get("above_50") else "NO",
+                            ">200MA": "YES" if d.get("above_200") else "NO",
                         }
                     )
                 sec_df = pd.DataFrame(sec_rows).sort_values(
@@ -2126,7 +2128,7 @@ elif selection == "Daily Briefing":
                         else "#e0c97f"
                     )
                     with st.expander(
-                        f"{'🔴' if sev == 'HIGH' else '🟡'} {dis.get('title', '')}",
+                        f"[{sev}] {dis.get('title', '')}",
                         expanded=True,
                     ):
                         c1, c2 = st.columns(2)
@@ -2195,7 +2197,7 @@ elif selection == "Daily Briefing":
                             )
                             if idea.get("risk"):
                                 st.markdown(
-                                    f"<div style='font-size:0.8rem;color:#ffaaaa;margin-top:5px;'>⚠ Risk: {idea['risk']}</div>",
+                                    f"<div style='font-size:0.8rem;color:#ffaaaa;margin-top:5px;'><span style='display:inline-block;width:8px;height:8px;background:#ff4444;border-radius:50%;margin-right:5px;animation:pulse-dot 1.5s ease-in-out infinite;'></span>Risk: {idea['risk']}</div>",
                                     unsafe_allow_html=True,
                                 )
                         with ic2:
@@ -2220,6 +2222,16 @@ elif selection == "Quant Terminal":
     from quant_terminal import show_quant_terminal
 
     show_quant_terminal()
+
+elif selection == "Strategy Research Lab":
+    from strategy_research_lab import render_strategy_research_lab
+
+    render_strategy_research_lab()
+
+elif selection == "Quant Modeling Lab":
+    from quant_modeling_lab import render_quant_modeling_lab
+
+    render_quant_modeling_lab()
 
 elif selection == "Settings & Analytics":
     st.title("Analytics & Settings")

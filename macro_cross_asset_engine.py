@@ -690,7 +690,7 @@ class MacroCrossAssetEngine:
 
         if contradiction_flag:
             implications.append(
-                "⚠ CONTRADICTION: USD and gold BOTH rising — signals potential loss of confidence "
+                "[!] CONTRADICTION: USD and gold BOTH rising — signals potential loss of confidence "
                 "in fiat broadly. Watch for accelerating dollar debasement narrative."
             )
 
@@ -713,7 +713,7 @@ class MacroCrossAssetEngine:
                 f"Gold: {(gld_mom_1m or 0):+.1%} | Oil: {(uso_mom_1m_usd or 0):+.1%} | "
                 f"Commodities: {(gsg_mom_1m or 0):+.1%} | EM: {(eem_mom_1m or 0):+.1%}. "
                 f"USD-Gold corr (60d): {recent_corr_gld:.2f}. "
-                f"{'⚠ USD+Gold BOTH rising: fiat confidence signal.' if contradiction_flag else ''}"
+                f"{'[!] USD+Gold BOTH rising: fiat confidence signal.' if contradiction_flag else ''}"
             ),
             trade_implications=implications,
             regime=regime,

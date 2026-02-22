@@ -659,7 +659,7 @@ class AlternativeDataEngine:
                 f"Sentiment score {s:+.2f} | Bull/Bear ratio {snap.bull_bear_ratio:.1f}x | "
                 f"Mentions: {snap.mention_count:,} | Velocity: {velocity:+.2f}. "
                 f"Top themes: {', '.join(snap.top_themes[:2])}. "
-                f"{'⚠ Unusual activity — contrarian risk.' if snap.unusual_activity and s > 0.6 else ''}"
+                f"{'[!] Unusual activity — contrarian risk.' if snap.unusual_activity and s > 0.6 else ''}"
             ),
             value=round(s * 100, 1),
             metadata={

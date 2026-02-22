@@ -393,7 +393,7 @@ def _fetch_and_score(
         elif score > -15:
             signal = " Neutral"
         elif score > -40:
-            signal = "🟠 Sell"
+            signal = "[SELL] Sell"
         else:
             signal = "[ALERT] Strong Sell"
 

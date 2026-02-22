@@ -1246,7 +1246,7 @@ def show_paper_trading():
             st.dataframe(pd.DataFrame(opt_rows), use_container_width=True, hide_index=True)
             close_idx = st.number_input("Close option #", min_value=1, max_value=len(portfolio["options"]), value=1, key="pt_close_oidx")
             if st.button("Close Option", key="pt_close_opt"):
-                _close_option(portfolio, close_idx - 1, current_price); st.rerun()
+                _close_option(portfolio, close_idx - 1, live_price); st.rerun()
         else:
             st.caption("No open options positions.")
 

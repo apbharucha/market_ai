@@ -1128,7 +1128,7 @@ class OctavianEnhancedChatbot:
                 text += f"- **Rationale:** {profit_probability:.1%} profit probability\n"
                 
             elif profit_probability < 0.45 and confidence > 0.5:
-                text += "**🟠 MODERATE SELL** - Negative mathematical edge\n"
+                text += "**[SELL] MODERATE SELL** - Negative mathematical edge\n"
                 text += f"- **Action:** Reduce exposure or small short\n"
                 text += f"- **Rationale:** {(1-profit_probability):.1%} decline probability\n"
                 

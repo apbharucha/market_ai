@@ -35,7 +35,7 @@ TRADING_STYLES = {
 RISK_PROFILES = {
     "Conservative": {"max_risk_pct": 1.0, "max_positions": 3, "color": "", "desc": "Capital preservation first"},
     "Moderate": {"max_risk_pct": 2.0, "max_positions": 5, "color": "[NOTE]", "desc": "Balanced risk/reward"},
-    "Aggressive": {"max_risk_pct": 5.0, "max_positions": 10, "color": "🟠", "desc": "Growth-focused, higher drawdowns OK"},
+    "Aggressive": {"max_risk_pct": 5.0, "max_positions": 10, "color": "#ff9800", "desc": "Growth-focused, higher drawdowns OK"},
     "Very Aggressive": {"max_risk_pct": 10.0, "max_positions": 20, "color": "", "desc": "Maximum returns, high volatility tolerance"},
 }
 

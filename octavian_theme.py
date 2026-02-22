@@ -107,6 +107,21 @@ def _get_theme_css() -> str:
         to   {{ opacity: 1; transform: translateY(0); }}
     }}
 
+    @keyframes pulse-dot {{
+        0%, 100% {{ opacity: 1; transform: scale(1); }}
+        50%       {{ opacity: 0.4; transform: scale(0.85); }}
+    }}
+
+    @keyframes status-blink {{
+        0%, 100% {{ opacity: 1; }}
+        50%       {{ opacity: 0.5; }}
+    }}
+
+    @keyframes badge-glow {{
+        0%, 100% {{ box-shadow: 0 0 0 0 rgba(201,168,76,0); }}
+        50%       {{ box-shadow: 0 0 6px 2px rgba(201,168,76,0.3); }}
+    }}
+
     @keyframes fadeIn {{
         from {{ opacity: 0; }}
         to   {{ opacity: 1; }}
@@ -125,6 +140,195 @@ def _get_theme_css() -> str:
     @keyframes slideInLeft {{
         from {{ opacity: 0; transform: translateX(-8px); }}
         to   {{ opacity: 1; transform: translateX(0); }}
+    }}
+
+    /* --- MICROANIMATION UTILITY CLASSES (emoji replacements) --- */
+
+    /* Status indicator dot — replaces colored circle emojis */
+    .oct-dot {{
+        display: inline-block;
+        width: 9px;
+        height: 9px;
+        border-radius: 50%;
+        margin-right: 6px;
+        vertical-align: middle;
+        flex-shrink: 0;
+    }}
+    .oct-dot-red   {{ background: #ef5350; animation: pulse-dot 1.8s ease-in-out infinite; }}
+    .oct-dot-green {{ background: #4caf50; animation: pulse-dot 1.8s ease-in-out infinite; }}
+    .oct-dot-gold  {{ background: #c9a84c; animation: pulse-dot 2.2s ease-in-out infinite; }}
+    .oct-dot-gray  {{ background: #78909c; }}
+    .oct-dot-orange {{ background: #ff9800; animation: pulse-dot 2s ease-in-out infinite; }}
+
+    /* Status badge — replaces emoji status labels */
+    .oct-badge {{
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        border-radius: 4px;
+        padding: 2px 9px;
+        font-size: 0.72rem;
+        font-weight: 600;
+        letter-spacing: 0.06em;
+        animation: fadeInUp 0.3s ease-out;
+    }}
+    .oct-badge-danger {{
+        background: rgba(239,83,80,0.12);
+        border: 1px solid rgba(239,83,80,0.35);
+        color: #ef5350;
+    }}
+    .oct-badge-success {{
+        background: rgba(76,175,80,0.12);
+        border: 1px solid rgba(76,175,80,0.35);
+        color: #4caf50;
+    }}
+    .oct-badge-neutral {{
+        background: rgba(120,144,156,0.12);
+        border: 1px solid rgba(120,144,156,0.35);
+        color: #78909c;
+    }}
+    .oct-badge-gold {{
+        background: rgba(201,168,76,0.12);
+        border: 1px solid rgba(201,168,76,0.35);
+        color: #c9a84c;
+        animation: badge-glow 2.5s ease-in-out infinite;
+    }}
+    .oct-badge-warning {{
+        background: rgba(255,152,0,0.12);
+        border: 1px solid rgba(255,152,0,0.35);
+        color: #ff9800;
+    }}
+
+    /* Alert icon — replaces ⚠ warning emoji */
+    .oct-alert-icon {{
+        display: inline-block;
+        width: 14px;
+        height: 14px;
+        background: #ff9800;
+        clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+        margin-right: 5px;
+        vertical-align: middle;
+        animation: status-blink 2s ease-in-out infinite;
+        flex-shrink: 0;
+    }}
+
+    /* Check icon — replaces ✓ checkmark */
+    .oct-check-icon {{
+        display: inline-block;
+        width: 12px;
+        height: 12px;
+        border-right: 2px solid #4caf50;
+        border-bottom: 2px solid #4caf50;
+        transform: rotate(45deg) translateY(-2px);
+        margin-right: 5px;
+        vertical-align: middle;
+        flex-shrink: 0;
+    }}
+
+    /* Cross icon — replaces ✗ */
+    .oct-cross-icon {{
+        display: inline-block;
+        width: 10px;
+        height: 10px;
+        position: relative;
+        margin-right: 5px;
+        vertical-align: middle;
+        flex-shrink: 0;
+    }}
+    .oct-cross-icon::before,
+    .oct-cross-icon::after {{
+        content: '';
+        position: absolute;
+        top: 50%; left: 0;
+        width: 100%; height: 2px;
+        background: #ef5350;
+        border-radius: 1px;
+    }}
+    .oct-cross-icon::before {{ transform: translateY(-50%) rotate(45deg); }}
+    .oct-cross-icon::after  {{ transform: translateY(-50%) rotate(-45deg); }}
+
+    /* Plus icon — replaces ✦ opportunity marker */
+    .oct-plus-icon {{
+        display: inline-block;
+        width: 12px;
+        height: 12px;
+        position: relative;
+        margin-right: 5px;
+        vertical-align: middle;
+        flex-shrink: 0;
+    }}
+    .oct-plus-icon::before,
+    .oct-plus-icon::after {{
+        content: '';
+        position: absolute;
+        background: #4caf50;
+        border-radius: 1px;
+    }}
+    .oct-plus-icon::before {{ top: 50%; left: 0; width: 100%; height: 2px; transform: translateY(-50%); }}
+    .oct-plus-icon::after  {{ top: 0; left: 50%; width: 2px; height: 100%; transform: translateX(-50%); }}
+
+    /* Severity indicator bar — replaces HIGH/MEDIUM/LOW text */
+    .oct-severity {{
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        font-size: 0.72rem;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+    }}
+    .oct-severity-high  {{ color: #ef5350; }}
+    .oct-severity-med   {{ color: #ff9800; }}
+    .oct-severity-low   {{ color: #c9a84c; }}
+
+    /* Animated severity bar */
+    .oct-sev-bar {{
+        display: inline-block;
+        height: 6px;
+        border-radius: 3px;
+        vertical-align: middle;
+        margin-right: 4px;
+    }}
+    .oct-sev-bar-high  {{ width: 24px; background: #ef5350; animation: status-blink 1.5s ease-in-out infinite; }}
+    .oct-sev-bar-med   {{ width: 16px; background: #ff9800; animation: status-blink 2s ease-in-out infinite; }}
+    .oct-sev-bar-low   {{ width: 8px;  background: #c9a84c; }}
+
+    /* Live indicator — animated green dot for live data */
+    .oct-live {{
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        font-size: 0.7rem;
+        color: #4caf50;
+        font-weight: 600;
+        letter-spacing: 0.06em;
+    }}
+    .oct-live-dot {{
+        width: 7px;
+        height: 7px;
+        background: #4caf50;
+        border-radius: 50%;
+        animation: pulse-dot 1.2s ease-in-out infinite;
+        flex-shrink: 0;
+    }}
+
+    /* Direction arrow — replaces up/down arrows */
+    .oct-arrow-up {{
+        display: inline-block;
+        width: 0; height: 0;
+        border-left: 5px solid transparent;
+        border-right: 5px solid transparent;
+        border-bottom: 8px solid #4caf50;
+        margin-right: 4px;
+        vertical-align: middle;
+    }}
+    .oct-arrow-down {{
+        display: inline-block;
+        width: 0; height: 0;
+        border-left: 5px solid transparent;
+        border-right: 5px solid transparent;
+        border-top: 8px solid #ef5350;
+        margin-right: 4px;
+        vertical-align: middle;
     }}
 
     /* --- SIDEBAR --- */
