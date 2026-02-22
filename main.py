@@ -59,9 +59,8 @@ nav_options = [
     "Intelligence Center",
     "Financial Model Generator",
     "Daily Briefing",
-    "Quant Terminal",
+    "Quant Portal",
     "Strategy Research Lab",
-    "Quant Modeling Lab",
     "Paper Trading",
     "Simulation Hub",
     "Trader Profile",
@@ -2218,20 +2217,15 @@ elif selection == "Daily Briefing":
                 if posture.get("notes"):
                     st.info(posture["notes"])
 
-elif selection == "Quant Terminal":
-    from quant_terminal import show_quant_terminal
+elif selection == "Quant Portal":
+    from quant_portal import render_quant_portal
 
-    show_quant_terminal()
+    render_quant_portal()
 
 elif selection == "Strategy Research Lab":
     from strategy_research_lab import render_strategy_research_lab
 
     render_strategy_research_lab()
-
-elif selection == "Quant Modeling Lab":
-    from quant_modeling_lab import render_quant_modeling_lab
-
-    render_quant_modeling_lab()
 
 elif selection == "Settings & Analytics":
     st.title("Analytics & Settings")

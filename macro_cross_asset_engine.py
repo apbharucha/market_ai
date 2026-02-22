@@ -1195,6 +1195,32 @@ class MacroCrossAssetEngine:
             summary=summary,
         )
 
+    def get_all_signals(self) -> list[CrossAssetSignal]:
+        """
+        Generate all cross-asset signals from individual analysis methods.
+        Returns a list of CrossAssetSignal objects for each relationship analyzed.
+        """
+        signals: list[CrossAssetSignal] = []
+        
+        # Run all cross-asset analyses
+        analysis_methods = [
+            self.analyze_bond_equity_relationship,
+            self.analyze_oil_inflation_rates_chain,
+            self.analyze_usd_commodities_relationship,
+            self.analyze_liquidity_crypto_flows,
+            self.analyze_yield_curve,
+        ]
+        
+        for method in analysis_methods:
+            try:
+                signal = method()
+                signals.append(signal)
+            except Exception as e:
+                # Skip any failing analyses but continue with others
+                pass
+        
+        return signals
+
 
 # ═══════════════════════════════════════════════════════════════════════════════
 # Singleton accessor

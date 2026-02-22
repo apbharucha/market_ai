@@ -775,3 +775,656 @@ def status_badge(text: str, variant: str = "neutral") -> str:
         f'font-size:0.72rem;font-weight:600;letter-spacing:0.5px;'
         f'color:{fg};background:{bg};border:1px solid {fg};">{text}</span>'
     )
+
+
+# ═══════════════════════════════════════════════════════════════════════════
+# ENHANCED MICROANIMATIONS - Sleek & Professional
+# ═══════════════════════════════════════════════════════════════════════════
+
+def get_extended_animations() -> str:
+    """Return extended CSS animations for enhanced UI."""
+    return """
+    <style>
+    /* Pulse animation for live indicators */
+    @keyframes pulse-glow {
+        0% { box-shadow: 0 0 5px currentColor; }
+        50% { box-shadow: 0 0 20px currentColor, 0 0 30px currentColor; }
+        100% { box-shadow: 0 0 5px currentColor; }
+    }
+    
+    /* Shimmer effect for loading states */
+    @keyframes shimmer {
+        0% { background-position: -1000px 0; }
+        100% { background-position: 1000px 0; }
+    }
+    
+    /* Smooth fade in for cards */
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    
+    /* Ripple effect for buttons */
+    @keyframes ripple {
+        0% {
+            transform: scale(0);
+            opacity: 0.5;
+        }
+        100% {
+            transform: scale(4);
+            opacity: 0;
+        }
+    }
+    
+    /* Smooth slide in from right */
+    @keyframes slideInRight {
+        from {
+            opacity: 0;
+            transform: translateX(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateX(0);
+        }
+    }
+    
+    /* Bounce subtle for notifications */
+    @keyframes bounce-subtle {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-5px); }
+    }
+    
+    /* Rotate for loading spinners */
+    @keyframes spin-smooth {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+    
+    /* Scale up animation */
+    @keyframes scaleIn {
+        from {
+            opacity: 0;
+            transform: scale(0.9);
+        }
+        to {
+            opacity: 1;
+            transform: scale(1);
+        }
+    }
+    
+    /* Gradient flow animation */
+    @keyframes gradientFlow {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+    }
+    
+    /* Hover glow effect */
+    .hover-glow:hover {
+        box-shadow: 0 0 15px rgba(201, 168, 76, 0.5);
+        transform: translateY(-2px);
+        transition: all 0.3s ease;
+    }
+    
+    /* Live pulse class */
+    .live-pulse {
+        animation: pulse-glow 2s ease-in-out infinite;
+    }
+    
+    /* Card animations */
+    .animate-card {
+        animation: fadeInUp 0.5s ease-out forwards;
+    }
+    
+    /* Slide in elements */
+    .animate-slide-right {
+        animation: slideInRight 0.4s ease-out forwards;
+    }
+    
+    /* Scale animations */
+    .animate-scale {
+        animation: scaleIn 0.3s ease-out forwards;
+    }
+    
+    /* Gradient backgrounds */
+    .gradient-animate {
+        background: linear-gradient(-45deg, #0a1628, #132240, #1a2d4a, #0a1628);
+        background-size: 400% 400%;
+        animation: gradientFlow 15s ease infinite;
+    }
+    
+    /* Notification bounce */
+    .notify-bounce {
+        animation: bounce-subtle 0.5s ease-in-out;
+    }
+    
+    /* Loading shimmer */
+    .shimmer-load {
+        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+        background-size: 200% 100%;
+        animation: shimmer 2s infinite;
+    }
+    
+    /* Smooth button transitions */
+    .smooth-btn {
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    .smooth-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    }
+    
+    /* Status indicator animations */
+    .status-active {
+        animation: pulse-glow 2s ease-in-out infinite;
+        border-radius: 50%;
+    }
+    
+    /* Progress bar animation */
+    .progress-animate {
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .progress-animate::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+        animation: shimmer 2s infinite;
+    }
+    
+    /* Number counter animation */
+    @keyframes countUp {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .count-animate {
+        animation: countUp 0.5s ease-out forwards;
+    }
+    
+    /* Attention grabber */
+    .attention-pulse {
+        animation: pulse-glow 1.5s ease-in-out infinite;
+    }
+    
+    /* Table row hover */
+    .table-row-hover:hover {
+        background: rgba(201, 168, 76, 0.1);
+        transition: background 0.2s ease;
+    }
+    
+    /* Icon animations */
+    .icon-spin {
+        animation: spin-smooth 1s linear infinite;
+    }
+    
+    /* Card hover lift */
+    .card-lift {
+        transition: all 0.3s ease;
+    }
+    
+    .card-lift:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+    }
+    
+    /* Focus ring animation */
+    .focus-ring:focus {
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(201, 168, 76, 0.5);
+        transition: box-shadow 0.2s ease;
+    }
+    
+    /* Stagger animation delays */
+    .stagger-1 { animation-delay: 0.1s; }
+    .stagger-2 { animation-delay: 0.2s; }
+    .stagger-3 { animation-delay: 0.3s; }
+    .stagger-4 { animation-delay: 0.4s; }
+    .stagger-5 { animation-delay: 0.5s; }
+    
+    /* Success checkmark animation */
+    @keyframes checkmark {
+        0% { stroke-dashoffset: 100; }
+        100% { stroke-dashoffset: 0; }
+    }
+    
+    .checkmark-animate {
+        stroke-dasharray: 100;
+        stroke-dashoffset: 100;
+        animation: checkmark 0.5s ease-out forwards;
+    }
+    
+    /* Warning shake */
+    @keyframes shake {
+        0%, 100% { transform: translateX(0); }
+        25% { transform: translateX(-5px); }
+        75% { transform: translateX(5px); }
+    }
+    
+    .shake-animate {
+        animation: shake 0.3s ease-in-out;
+    }
+    
+    /* Smooth scrollbar */
+    ::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+    }
+    
+    ::-webkit-scrollbar-track {
+        background: #0a1628;
+    }
+    
+    ::-webkit-scrollbar-thumb {
+        background: #1a2d4a;
+        border-radius: 4px;
+    }
+    
+    ::-webkit-scrollbar-thumb:hover {
+        background: #c9a84c;
+    }
+    
+    /* Tooltip animation */
+    .tooltip {
+        position: relative;
+        display: inline-block;
+    }
+    
+    .tooltip .tooltiptext {
+        visibility: hidden;
+        opacity: 0;
+        background-color: #132240;
+        color: #c9a84c;
+        text-align: center;
+        padding: 8px 12px;
+        border-radius: 6px;
+        position: absolute;
+        z-index: 1;
+        bottom: 125%;
+        left: 50%;
+        transform: translateX(-50%);
+        transition: opacity 0.3s, visibility 0.3s;
+        border: 1px solid #c9a84c;
+    }
+    
+    .tooltip:hover .tooltiptext {
+        visibility: visible;
+        opacity: 1;
+    }
+    
+    /* Skeleton loading */
+    .skeleton {
+        background: linear-gradient(90deg, #132240 25%, #1a2d4a 50%, #132240 75%);
+        background-size: 200% 100%;
+        animation: shimmer 1.5s infinite;
+    }
+    
+    /* Breadcrumb animation */
+    .breadcrumb-item + .breadcrumb-item::before {
+        content: '>';
+        padding: 0 8px;
+        color: #78909c;
+        animation: fadeInUp 0.3s ease-out;
+    }
+    
+    /* Tab indicator animation */
+    .stTabs [data-baseweb="tab-list"] button[aria-selected="true"] {
+        background: linear-gradient(135deg, #132240, #1a2d4a) !important;
+        border-color: #c9a84c !important;
+        transition: all 0.3s ease !important;
+    }
+    
+    /* Expandable sections */
+    .streamlit-expanderHeader {
+        transition: all 0.3s ease !important;
+    }
+    
+    .streamlit-expanderHeader:hover {
+        background: rgba(201, 168, 76, 0.1) !important;
+    }
+    
+    /* DataFrame styling */
+    .stDataFrame {
+        border: 1px solid #1e3050 !important;
+        border-radius: 8px !important;
+        overflow: hidden;
+    }
+    
+    /* Metrics animation */
+    .stMetric {
+        transition: all 0.3s ease;
+    }
+    
+    .stMetric:hover {
+        background: rgba(201, 168, 76, 0.05);
+        border-radius: 8px;
+    }
+    
+    /* Slider thumb animation */
+    .stSlider [role="slider"] {
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    
+    .stSlider [role="slider"]:hover {
+        transform: scale(1.2);
+        box-shadow: 0 0 10px rgba(201, 168, 76, 0.5);
+    }
+    
+    /* Progress bar */
+    .stProgress > div > div > div {
+        transition: width 0.5s ease;
+    }
+    
+    /* Spinner animation */
+    .stSpinner > div {
+        animation: spin-smooth 1s linear infinite;
+    }
+    
+    /* Success/Error/Info toast animations */
+    .stToast {
+        animation: fadeInUp 0.3s ease-out;
+    }
+    
+    /* Selectbox dropdown */
+    .stSelectbox > div > div > div:first-child {
+        transition: all 0.2s ease;
+    }
+    
+    .stSelectbox > div > div > div:first-child:hover {
+        border-color: #c9a84c;
+    }
+    
+    /* Text input focus */
+    .stTextInput > div > div > input:focus {
+        border-color: #c9a84c !important;
+        box-shadow: 0 0 0 2px rgba(201, 168, 76, 0.2) !important;
+        transition: all 0.2s ease;
+    }
+    
+    /* Button hover effects */
+    .stButton > button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        transition: all 0.2s ease;
+    }
+    
+    /* Radio button animation */
+    .stRadio > label > div:first-child {
+        transition: all 0.2s ease;
+    }
+    
+    /* Checkbox animation */
+    .stCheckbox > label > div:first-child {
+        transition: all 0.2s ease;
+    }
+    
+    /* Divider animation */
+    hr {
+        border: none;
+        height: 1px;
+        background: linear-gradient(90deg, transparent, #1e3050, transparent);
+        transition: background 0.3s ease;
+    }
+    
+    hr:hover {
+        background: linear-gradient(90deg, transparent, #c9a84c, transparent);
+    }
+    
+    /* Image hover zoom */
+    .img-zoom {
+        overflow: hidden;
+    }
+    
+    .img-zoom img {
+        transition: transform 0.5s ease;
+    }
+    
+    .img-zoom:hover img {
+        transform: scale(1.1);
+    }
+    
+    /* Custom scrollable areas */
+    .scroll-smooth {
+        scroll-behavior: smooth;
+    }
+    
+    /* Paragraph text reveal */
+    @keyframes textReveal {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+    
+    .text-reveal {
+        animation: textReveal 0.5s ease-out forwards;
+    }
+    
+    /* Gradient text */
+    .gradient-text {
+        background: linear-gradient(90deg, #c9a84c, #d4b86a, #c9a84c);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-size: 200% auto;
+        animation: gradientFlow 3s ease infinite;
+    }
+    
+    /* Border animation */
+    .border-animate {
+        position: relative;
+    }
+    
+    .border-animate::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: linear-gradient(90deg, transparent, #c9a84c, transparent);
+        transform: scaleX(0);
+        transition: transform 0.3s ease;
+    }
+    
+    .border-animate:hover::before {
+        transform: scaleX(1);
+    }
+    
+    /* Floating animation */
+    @keyframes float {
+        0% { transform: translateY(0px); }
+        50% { transform: translateY(-10px); }
+        100% { transform: translateY(0px); }
+    }
+    
+    .float-animate {
+        animation: float 3s ease-in-out infinite;
+    }
+    
+    /* Typing effect */
+    @keyframes typing {
+        from { width: 0; }
+        to { width: 100%; }
+    }
+    
+    .typing-effect {
+        overflow: hidden;
+        white-space: nowrap;
+        animation: typing 2s steps(40, end);
+    }
+    
+    /* Blinking cursor */
+    @keyframes blink {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0; }
+    }
+    
+    .cursor-blink {
+        animation: blink 1s step-end infinite;
+    }
+    
+    /* Matrix rain effect (subtle) */
+    .matrix-bg {
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .matrix-bg::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: repeating-linear-gradient(
+            0deg,
+            transparent,
+            transparent 2px,
+            rgba(201, 168, 76, 0.03) 2px,
+            rgba(201, 168, 76, 0.03) 4px
+        );
+        pointer-events: none;
+    }
+    </style>
+    """
+
+
+def apply_extended_animations():
+    """Apply extended animations to the Streamlit app."""
+    st.markdown(get_extended_animations(), unsafe_allow_html=True)
+
+
+def animated_metric(label: str, value: str, delta: str = None, style: str = "default"):
+    """Render an animated metric card."""
+    delta_color = "#4caf50" if delta and delta.startswith("+") else "#ef5350" if delta else "#78909c"
+    
+    html = f"""
+    <div class="animate-card" style="
+        background: linear-gradient(145deg, {COLORS['navy_light']}, {COLORS['navy_mid']});
+        border: 1px solid {COLORS['border']};
+        border-radius: 12px;
+        padding: 16px;
+        margin: 8px 0;
+        transition: all 0.3s ease;
+    ">
+        <div style="
+            color: {COLORS['text_secondary']};
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+        ">{label}</div>
+        <div style="
+            color: {COLORS['text_primary']};
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        ">{value}</div>
+        {f'<div style="color: {delta_color}; font-size: 14px; font-weight: 600;">{delta}</div>' if delta else ''}
+    </div>
+    """
+    st.markdown(html, unsafe_allow_html=True)
+
+
+def animated_progress_bar(value: float, max_value: float = 100, label: str = ""):
+    """Render an animated progress bar."""
+    percentage = (value / max_value) * 100 if max_value > 0 else 0
+    
+    html = f"""
+    <div class="progress-animate" style="
+        background: {COLORS['navy_mid']};
+        border-radius: 8px;
+        height: 24px;
+        overflow: hidden;
+        position: relative;
+    ">
+        <div style="
+            background: linear-gradient(90deg, {COLORS['gold']}, {COLORS['gold_light']});
+            height: 100%;
+            width: {percentage}%;
+            border-radius: 8px;
+            transition: width 0.5s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        ">
+            {f'<span style="color: {COLORS["navy"]}; font-size: 12px; font-weight: 600;">{label}</span>' if label else ''}
+        </div>
+    </div>
+    """
+    st.markdown(html, unsafe_allow_html=True)
+
+
+def animated_status_indicator(status: str, label: str = ""):
+    """Render an animated status indicator."""
+    status_colors = {
+        "active": ("#4caf50", "Active"),
+        "inactive": ("#78909c", "Inactive"), 
+        "warning": ("#ff9800", "Warning"),
+        "error": ("#ef5350", "Error"),
+        "success": ("#4caf50", "Success")
+    }
+    
+    color, status_text = status_colors.get(status.lower(), status_colors["inactive"])
+    
+    html = f"""
+    <div style="display: flex; align-items: center; gap: 8px;" class="animate-slide-right">
+        <div class="status-active" style="
+            width: 12px;
+            height: 12px;
+            background: {color};
+            border-radius: 50%;
+            color: {color};
+        "></div>
+        <span style="color: {COLORS['text_secondary']}; font-size: 14px;">{label if label else status_text}</span>
+    </div>
+    """
+    st.markdown(html, unsafe_allow_html=True)
+
+
+def animated_container(content: str, animation: str = "fadeInUp"):
+    """Wrap content in an animated container."""
+    animations = {
+        "fadeInUp": "fadeInUp 0.5s ease-out forwards",
+        "slideInRight": "slideInRight 0.4s ease-out forwards",
+        "scaleIn": "scaleIn 0.3s ease-out forwards"
+    }
+    
+    anim = animations.get(animation, animations["fadeInUp"])
+    
+    html = f"""
+    <div style="
+        animation: {anim};
+        background: linear-gradient(145deg, {COLORS['navy_light']}, {COLORS['navy_mid']});
+        border: 1px solid {COLORS['border']};
+        border-radius: 12px;
+        padding: 20px;
+        margin: 10px 0;
+    ">
+        {content}
+    </div>
+    """
+    st.markdown(html, unsafe_allow_html=True)
+
+
+def loading_skeleton(width: str = "100%", height: str = "20px"):
+    """Render a loading skeleton placeholder."""
+    html = f"""
+    <div class="skeleton" style="
+        width: {width};
+        height: {height};
+        border-radius: 4px;
+    "></div>
+    """
+    st.markdown(html, unsafe_allow_html=True)
