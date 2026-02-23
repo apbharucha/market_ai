@@ -147,7 +147,7 @@ if selection == "Dashboard":
                 for i, (name, data) in enumerate(idx_data.items()):
                     with cols[i]:
                         st.metric(
-                            name, f"{data['value']:,.2f}", f"{data['change']:+.2f}%"
+                            name, f"{data.get('value', 0):,.2f}", f"{data.get('change', 0):+.2f}%"
                         )
                 st.caption(f"Live | {pd.Timestamp.now().strftime('%H:%M:%S')}")
             else:
