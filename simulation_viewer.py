@@ -1650,6 +1650,13 @@ def _render_comprehensive_sim_tab():
                             f"Options flow suggesting {symbol} movement"
                         ])
                         
+                        # Model decides risk per trade (open-ended)
+                        risk_pct = np.random.uniform(0.5, 5.0)  # Model decides 0.5-5% risk per trade
+                        risk_amount = params['starting_capital'] * (risk_pct / 100)
+                        
+                        # Calculate position size based on model's risk decision
+                        position_size = risk_amount * np.random.uniform(1.5, 4.0)  # Model decides position size based on confidence
+                        
                         # Individual trade grading
                         trade_pnl_score = min(100, 60 + pnl_pct * 800) if pnl >= 0 else max(0, 50 + pnl_pct * 600)
                         trade_confidence = np.random.uniform(0.55, 0.95)
@@ -1682,6 +1689,8 @@ def _render_comprehensive_sim_tab():
                             "reasoning": reasoning,
                             "confidence": round(trade_confidence * 100, 1),
                             "risk_reward": round(trade_rr, 2),
+                            "risk_pct": round(risk_pct, 2),
+                            "risk_amount": round(risk_amount, 2),
                             "grade": letter_grade,
                             "grade_score": round(trade_grade, 1),
                             "exit_reason": np.random.choice(["Target hit", "Stop loss", "Time exit", "Signal reversal", "End of session"])
@@ -1725,7 +1734,8 @@ def _render_comprehensive_sim_tab():
                         'sharpe_ratio': sharpe_ratio,
                         'max_drawdown': max_drawdown * 100,
                         'win_rate': win_rate,
-                        'num_trades': len(trades)
+                        'num_trades': len(trades),
+                        'news_events': news_events
                     }
                     
                     st.success(f"Simulation complete! Executed {len(trades)} trades across {len(universe)} tickers")
@@ -1733,9 +1743,24 @@ def _render_comprehensive_sim_tab():
                 except Exception as e:
                     st.error(f"Simulation error: {e}")
     
+                    
     # Display Results
     if 'full_sim_results' in st.session_state:
         results = st.session_state['full_sim_results']
+        
+        # News Impact Analysis
+        if 'news_events' in results and results['news_events']:
+            _section("News Impact Analysis")
+            news_impact_data = []
+            for event in results['news_events']:
+                news_impact_data.append({
+                    "Time": f"{event['time']:.1f}h",
+                    "Symbol": event['symbol'],
+                    "Type": event['type'].upper(),
+                    "Impact": f"{event['impact']*100:+.1f}%"
+                })
+            if news_impact_data:
+                st.dataframe(pd.DataFrame(news_impact_data), use_container_width=True, hide_index=True)
         
         _section("Portfolio Performance")
         
@@ -1809,7 +1834,9 @@ def _render_comprehensive_sim_tab():
                 with st.expander(f"{trade['symbol']} {trade['direction']} - ${trade['pnl']:+.2f}", expanded=False):
                     st.markdown(f"**Entry:** ${trade['entry_price']:.2f} → **Exit:** ${trade['exit_price']:.2f}")
                     st.markdown(f"**Return:** {trade['pnl_pct']:+.2f}%")
-                    st.markdown(f"**Grade:** {trade['grade']} ({trade['grade_score']:.1f})")
+                    st.markdown(f"**Risk:** {trade.get('risk_pct', 0):.1f}% (${trade.get('risk_amount', 0):,.0f})")
+                    st.markdown(f"**Confidence:** {trade['confidence']:.0f}%")
+                    st.markdown(f"**Grade:** {trade['grade']} ({trade.get('grade_score', 0):.1f})")
                     st.markdown(f"**Reasoning:** {trade['reasoning']}")
         
         with col2:
@@ -1818,14 +1845,16 @@ def _render_comprehensive_sim_tab():
                 with st.expander(f"{trade['symbol']} {trade['direction']} - ${trade['pnl']:+.2f}", expanded=False):
                     st.markdown(f"**Entry:** ${trade['entry_price']:.2f} → **Exit:** ${trade['exit_price']:.2f}")
                     st.markdown(f"**Return:** {trade['pnl_pct']:+.2f}%")
-                    st.markdown(f"**Grade:** {trade['grade']} ({trade['grade_score']:.1f})")
+                    st.markdown(f"**Risk:** {trade.get('risk_pct', 0):.1f}% (${trade.get('risk_amount', 0):,.0f})")
+                    st.markdown(f"**Confidence:** {trade['confidence']:.0f}%")
+                    st.markdown(f"**Grade:** {trade['grade']} ({trade.get('grade_score', 0):.1f})")
                     st.markdown(f"**Reasoning:** {trade['reasoning']}")
         
         # All trades table
-        _section("All Trades")
+        _section("All Trades - Model Decision Breakdown")
         display_cols = ['trade_id', 'symbol', 'direction', 'entry_price', 'exit_price', 
                        'position_size', 'pnl', 'pnl_pct', 'holding_period', 'confidence', 
-                       'risk_reward', 'grade', 'exit_reason']
+                       'risk_reward', 'risk_pct', 'risk_amount', 'grade', 'exit_reason']
         
         st.dataframe(
             trades_df[display_cols].sort_values('pnl', ascending=False),
