@@ -467,7 +467,7 @@ def render_quant_portal():
             
             signal_col1, signal_col2 = st.columns([2, 1])
             with signal_col1:
-                signal_symbol = st.selectbox("Select Symbol for Signal", symbols, key="signal_symbol_select")
+                signal_symbol = st.selectbox("Select Symbol for Signal Analysis", symbols, key="signal_symbol_select")
             
             if st.button("Generate Quant Signal", type="primary"):
                 with st.spinner("Running quant ensemble model..."):
@@ -559,7 +559,7 @@ def render_quant_portal():
         regime_col1, regime_col2 = st.columns(2)
         
         with regime_col1:
-            regime_symbol = st.selectbox("Symbol", symbols if symbols else ["SPY", "QQQ", "IWM"], index=0, key="regime_symbol_select")
+            regime_symbol = st.selectbox("Select Regime Analysis Symbol", symbols if symbols else ["SPY", "QQQ", "IWM"], index=0, key="regime_symbol_select")
         
         with regime_col2:
             regime_method = st.selectbox("Method", ["Hidden Markov Model", "Bayesian Regime Switching", "Volatility Clustering"], key="regime_method_select")
@@ -771,7 +771,7 @@ def render_quant_portal():
         
         bt_col1, bt_col2, bt_col3 = st.columns(3)
         with bt_col1:
-            bt_symbol = st.selectbox("Symbol", symbols if symbols else ["SPY", "AAPL", "BTC-USD"], key="bt_symbol_select")
+            bt_symbol = st.selectbox("Select Backtest Symbol", symbols if symbols else ["SPY", "AAPL", "BTC-USD"], key="bt_symbol_select")
         with bt_col2:
             bt_period = st.selectbox("Period", ["1y", "2y", "5y", "10y"], key="bt_period_select")
         with bt_col3:
