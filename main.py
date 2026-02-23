@@ -323,24 +323,27 @@ if selection == "Dashboard":
                 try:
                     from breaking_trades_generator import BreakingTradesGenerator
 
-                    # Default watchlist
-                    watchlist = [
-                        "AAPL",
-                        "MSFT",
-                        "GOOGL",
-                        "NVDA",
-                        "TSLA",
-                        "META",
-                        "AMZN",
-                        "SPY",
-                        "QQQ",
-                        "AMD",
-                        "NFLX",
-                        "DIS",
-                        "V",
-                        "MA",
-                        "JPM",
-                    ]
+                    # Use full ticker universe instead of preset list
+                    try:
+                        from ticker_universe import TickerUniverse
+                        tu = TickerUniverse()
+                        # Get diverse sample from universe
+                        watchlist = tu.get_full_universe_sample(50)  # Scan 50 random tickers from universe
+                    except:
+                        # Fallback to preset list if universe not available
+                        watchlist = [
+                            "AAPL", "MSFT", "GOOGL", "NVDA", "TSLA",
+                            "META", "AMZN", "SPY", "QQQ", "AMD",
+                            "NFLX", "DIS", "V", "MA", "JPM",
+                            "UNH", "HD", "PG", "COST", "BA",
+                            "MS", "GS", "BLK", "SCHW", "C",
+                            "XOM", "CVX", "COP", "SLB", "EOG",
+                            "PFE", "JNJ", "UNP", "LIN", "NEE",
+                            "AMT", "PLD", "CCI", "EQIX", "PSA",
+                            "MCO", "SPGI", "AXP", "USB", "TFC",
+                            "BKNG", "CME", "ICE", "SCHD", "VTI",
+                            "VOO", "IVV", "VEA", "VWO", "BND"
+                        ]
 
                     gen = BreakingTradesGenerator(min_confidence=55.0)
                     breaking_trades = gen.generate_breaking_trades(

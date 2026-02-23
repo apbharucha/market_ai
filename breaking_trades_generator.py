@@ -232,8 +232,8 @@ class BreakingTradesGenerator:
             indicators['atr_pct'] = float(indicators['atr'] / prices[-1] * 100) if prices[-1] > 0 else 0
 
         # Volatility
-        if len(prices) >= 20:
-            returns = np.diff(prices[-20:]) / prices[-21:-1]
+        if len(prices) >= 21:
+            returns = np.diff(prices[-20:]) / prices[-20:-1]
             indicators['volatility'] = float(np.std(returns) * np.sqrt(252))
         else:
             indicators['volatility'] = 0.20

@@ -1401,11 +1401,14 @@ def _render_performance_tab():
                 if selected_sim is not None:
                     sim_data = sim_options[selected_sim][1]
                     
-                    # Auto-fill grading fields - convert percentages to whole numbers for input
+                    # Auto-fill grading fields - fix scaling issues
+                    # total_return is stored as decimal (0.15), convert to percentage for display
                     st.session_state["grade_ret"] = sim_data.get("total_return", 0) * 100
                     st.session_state["grade_sharpe"] = sim_data.get("sharpe_ratio", 0)
-                    st.session_state["grade_dd"] = sim_data.get("max_drawdown", 0) * 100
-                    st.session_state["grade_wr"] = sim_data.get("win_rate", 0) * 100
+                    # max_drawdown is already stored as percentage (12.0), use directly
+                    st.session_state["grade_dd"] = sim_data.get("max_drawdown", 0)
+                    # win_rate is stored as percentage (55.0), use directly  
+                    st.session_state["grade_wr"] = sim_data.get("win_rate", 0)
                     
                     # Handle different field names
                     num_trades = sim_data.get("num_trades", sim_data.get("total_decisions", 0))
@@ -1578,10 +1581,10 @@ def _render_comprehensive_sim_tab():
         # Starting capital
         starting_capital = st.number_input(
             "Starting Capital ($)", 
-            min_value=10000, 
+            min_value=500, 
             max_value=10000000, 
             value=100000,
-            step=10000,
+            step=5000,
             help="Initial capital for trading"
         )
     
@@ -1672,8 +1675,12 @@ def _render_comprehensive_sim_tab():
                     # Simulate comprehensive trading across all tickers
                     np.random.seed(42)
                     
-                    # Generate trades across universe
-                    num_trades = min(len(universe) * 3, 500)  # Scale with universe size
+                    # Generate trades across universe - make fully dynamic based on capital and duration
+                    # Scale trades based on capital and duration for realistic simulation
+                    capital_per_trade = starting_capital / 100  # Dynamic based on capital
+                    time_factor = duration_minutes / 60  # Scale with duration
+                    base_trades = len(universe) * 2  # Base on universe size
+                    num_trades = int(min(base_trades * time_factor, starting_capital / capital_per_trade))
                     
                     trades = []
                     portfolio_value = params['starting_capital']
@@ -1890,10 +1897,10 @@ def _render_comprehensive_sim_tab():
         trades_df = pd.DataFrame(results['trades'])
         
         # Top winners
-        top_winners = trades_df.nlargest(5, 'pnl')[['symbol', 'direction', 'entry_price', 'exit_price', 'pnl', 'pnl_pct', 'grade', 'reasoning']]
+        top_winners = trades_df.nlargest(5, 'pnl')[['symbol', 'direction', 'entry_price', 'exit_price', 'pnl', 'pnl_pct', 'risk_pct', 'risk_amount', 'confidence', 'grade', 'grade_score', 'reasoning']]
         
         # Top losers
-        top_losers = trades_df.nsmallest(5, 'pnl')[['symbol', 'direction', 'entry_price', 'exit_price', 'pnl', 'pnl_pct', 'grade', 'reasoning']]
+        top_losers = trades_df.nsmallest(5, 'pnl')[['symbol', 'direction', 'entry_price', 'exit_price', 'pnl', 'pnl_pct', 'risk_pct', 'risk_amount', 'confidence', 'grade', 'grade_score', 'reasoning']]
         
         col1, col2 = st.columns(2)
         
@@ -1930,6 +1937,101 @@ def _render_comprehensive_sim_tab():
             use_container_width=True,
             hide_index=True
         )
+        
+        # Model Performance Evaluation
+        _section("Model Performance Evaluation & Optimization Insights")
+        
+        # Analyze performance
+        total_trades = len(trades_df)
+        winning_trades = len(trades_df[trades_df['pnl'] > 0])
+        losing_trades = len(trades_df[trades_df['pnl'] < 0])
+        win_rate = (winning_trades / total_trades * 100) if total_trades > 0 else 0
+        
+        avg_win = trades_df[trades_df['pnl'] > 0]['pnl'].mean() if winning_trades > 0 else 0
+        avg_loss = trades_df[trades_df['pnl'] < 0]['pnl'].mean() if losing_trades > 0 else 0
+        
+        # Analyze by direction
+        long_trades = trades_df[trades_df['direction'] == 'LONG']
+        short_trades = trades_df[trades_df['direction'] == 'SHORT']
+        
+        long_win_rate = (len(long_trades[long_trades['pnl'] > 0]) / len(long_trades) * 100) if len(long_trades) > 0 else 0
+        short_win_rate = (len(short_trades[short_trades['pnl'] > 0]) / len(short_trades) * 100) if len(short_trades) > 0 else 0
+        
+        # Analyze by confidence levels
+        high_conf = trades_df[trades_df['confidence'] >= 0.75]
+        med_conf = trades_df[(trades_df['confidence'] >= 0.55) & (trades_df['confidence'] < 0.75)]
+        low_conf = trades_df[trades_df['confidence'] < 0.55]
+        
+        high_conf_wr = (len(high_conf[high_conf['pnl'] > 0]) / len(high_conf) * 100) if len(high_conf) > 0 else 0
+        med_conf_wr = (len(med_conf[med_conf['pnl'] > 0]) / len(med_conf) * 100) if len(med_conf) > 0 else 0
+        low_conf_wr = (len(low_conf[low_conf['pnl'] > 0]) / len(low_conf) * 100) if len(low_conf) > 0 else 0
+        
+        # Generate insights
+        insights = []
+        
+        # Win rate analysis
+        if win_rate > 55:
+            insights.append(f"✓ Strong overall win rate of {win_rate:.1f}% - model showing good accuracy")
+        elif win_rate > 50:
+            insights.append(f"→ Moderate win rate of {win_rate:.1f}% - model slightly profitable")
+        else:
+            insights.append(f"✗ Weak win rate of {win_rate:.1f}% - model needs improvement")
+        
+        # Direction analysis
+        if long_win_rate > short_win_rate + 10:
+            insights.append(f"✓ Long positions performing significantly better ({long_win_rate:.1f}% vs {short_win_rate:.1f}%)")
+        elif short_win_rate > long_win_rate + 10:
+            insights.append(f"✓ Short positions performing significantly better ({short_win_rate:.1f}% vs {long_win_rate:.1f}%)")
+        else:
+            insights.append(f"→ Direction balance is even - both long ({long_win_rate:.1f}%) and short ({short_win_rate:.1f}%)")
+        
+        # Confidence analysis
+        if high_conf_wr > med_conf_wr + 15:
+            insights.append(f"✓ High confidence trades ({high_conf_wr:.1f}%) significantly outperform medium confidence ({med_conf_wr:.1f}%)")
+            insights.append("  → Recommendation: Increase position sizing on high-confidence signals")
+        elif low_conf_wr > high_conf_wr:
+            insights.append("✗ Low confidence trades outperforming high confidence - model confidence calibration issues")
+            insights.append("  → Recommendation: Review confidence scoring methodology")
+        
+        # Risk/Reward analysis
+        if avg_win > abs(avg_loss) * 1.5:
+            insights.append(f"✓ Excellent risk/reward - avg win ${avg_win:,.0f} vs avg loss ${avg_loss:,.0f}")
+        elif avg_win > abs(avg_loss):
+            insights.append(f"→ Positive risk/reward - avg win ${avg_win:,.0f} vs avg loss ${avg_loss:,.0f}")
+        else:
+            insights.append(f"✗ Poor risk/reward - avg win ${avg_win:,.0f} vs avg loss ${avg_loss:,.0f}")
+        
+        # Display insights
+        for insight in insights:
+            st.markdown(insight)
+        
+        # Model optimization recommendations
+        st.markdown("### Model Optimization Recommendations")
+        
+        recommendations = []
+        
+        if win_rate < 50:
+            recommendations.append("1. **Improve Entry Timing**: Focus on better timing for entry signals - consider adding momentum filters")
+        
+        if long_win_rate < short_win_rate - 15:
+            recommendations.append("2. **Direction Bias**: Consider favoring short positions or improve long signal quality")
+        elif short_win_rate < long_win_rate - 15:
+            recommendations.append("3. **Direction Bias**: Consider favoring long positions or improve short signal quality")
+        
+        if high_conf_wr < 60:
+            recommendations.append("4. **Confidence Calibration**: High confidence signals not performing well - recalibrate confidence scoring")
+        
+        if avg_win < abs(avg_loss):
+            recommendations.append("5. **Risk/Reward**: Improve profit targets or reduce stop loss distance")
+        
+        if len(high_conf) < total_trades * 0.2:
+            recommendations.append("6. **Signal Generation**: Model generating too few high-confidence signals - relax thresholds or improve algorithms")
+        
+        if not recommendations:
+            recommendations.append("✓ Model performing well across all metrics - continue current approach")
+        
+        for rec in recommendations:
+            st.markdown(rec)
         
         # Comprehensive Grading
         _section("Comprehensive Performance Grading")
