@@ -1626,3 +1626,65 @@ class MarketSimulationEngine:
             volatility_analysis={}, correlation_analysis={}
         )
 
+    def get_recent_simulations(self, limit: int = 20) -> list[dict]:
+        """
+        Retrieve recent simulation results from the database.
+        Returns a list of dictionaries containing simulation metadata and key metrics.
+        """
+        import sqlite3
+        import os
+        
+        recent_simulations = []
+        
+        try:
+            # Get database path
+            db_path = self.get_current_db_path()
+            
+            if not os.path.exists(db_path):
+                # Try to find any simulation databases
+                import glob
+                db_files = glob.glob("octavian_simulations_*.db")
+                if db_files:
+                    db_path = max(db_files)  # Use most recent
+                else:
+                    return []
+            
+            # Connect and query
+            conn = sqlite3.connect(db_path)
+            cursor = conn.cursor()
+            
+            # Get recent simulations
+            cursor.execute("""
+                SELECT simulation_id, start_time, end_time, market_regime, 
+                       total_return, sharpe_ratio, max_drawdown, win_rate, 
+                       total_decisions, successful_decisions, failed_decisions
+                FROM simulations 
+                ORDER BY start_time DESC 
+                LIMIT ?
+            """, (limit,))
+            
+            rows = cursor.fetchall()
+            
+            for row in rows:
+                recent_simulations.append({
+                    "simulation_id": row[0],
+                    "start_time": row[1],
+                    "end_time": row[2],
+                    "market_regime": row[3],
+                    "total_return": row[4] if row[4] is not None else 0.0,
+                    "sharpe_ratio": row[5] if row[5] is not None else 0.0,
+                    "max_drawdown": row[6] if row[6] is not None else 0.0,
+                    "win_rate": row[7] if row[7] is not None else 0.0,
+                    "total_decisions": row[8] if row[8] is not None else 0,
+                    "successful_decisions": row[9] if row[9] is not None else 0,
+                    "failed_decisions": row[10] if row[10] is not None else 0,
+                })
+            
+            conn.close()
+            
+        except Exception as e:
+            # If database retrieval fails, return empty list
+            pass
+        
+        return recent_simulations
+
