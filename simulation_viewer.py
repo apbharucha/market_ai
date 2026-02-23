@@ -1352,6 +1352,72 @@ def _render_performance_tab():
         except Exception as e:
             st.warning(f"Could not load simulation history: {e}")
 
+    # Import Simulation Button and Selector
+    st.markdown("### Import Simulation Data")
+    col_imp1, col_imp2 = st.columns([1, 3])
+    
+    with col_imp1:
+        show_import = st.checkbox("Import from Recent Sims", value=False, key="show_import_sim")
+    
+    if show_import and HAS_ENGINE:
+        try:
+            # First check if there's a current simulation result in session state
+            current_sim_data = None
+            if 'full_sim_results' in st.session_state:
+                current_sim_data = st.session_state['full_sim_results']
+                current_sim_data['simulation_id'] = 'current'
+                current_sim_data['start_time'] = 'Now'
+            
+            engine = MarketSimulationEngine()
+            recent_sims = engine.get_recent_simulations(limit=50)
+            
+            # Combine current simulation with historical ones
+            all_sims = []
+            if current_sim_data:
+                all_sims.append(current_sim_data)
+            all_sims.extend(recent_sims)
+            
+            if all_sims:
+                # Create display options with distinguishing titles
+                sim_options = []
+                for sim in all_sims:
+                    sim_id = sim.get("simulation_id", "Unknown")[:12]
+                    date_str = str(sim.get("start_time", ""))[:16]
+                    regime = sim.get("market_regime", "Unknown")
+                    return_pct = sim.get("total_return", 0) * 100
+                    title = f"{date_str} | {regime} | {return_pct:+.1f}% | ID:{sim_id}"
+                    sim_options.append((title, sim))
+                
+                # Sort by recency (most recent first) - put 'Now' first
+                sim_options.sort(key=lambda x: 0 if x[1].get("start_time") == "Now" else 1, reverse=True)
+                
+                selected_sim = st.selectbox(
+                    "Select Simulation to Import",
+                    range(len(sim_options)),
+                    format_func=lambda i: sim_options[i][0],
+                    key="import_sim_select"
+                )
+                
+                if selected_sim is not None:
+                    sim_data = sim_options[selected_sim][1]
+                    
+                    # Auto-fill grading fields - convert percentages to whole numbers for input
+                    st.session_state["grade_ret"] = sim_data.get("total_return", 0) * 100
+                    st.session_state["grade_sharpe"] = sim_data.get("sharpe_ratio", 0)
+                    st.session_state["grade_dd"] = sim_data.get("max_drawdown", 0) * 100
+                    st.session_state["grade_wr"] = sim_data.get("win_rate", 0) * 100
+                    
+                    # Handle different field names
+                    num_trades = sim_data.get("num_trades", sim_data.get("total_decisions", 0))
+                    st.session_state["grade_dec"] = num_trades
+                    st.session_state["grade_succ"] = int(num_trades * sim_data.get("win_rate", 0) / 100)
+                    
+                    st.success(f"Imported simulation data: {sim_options[selected_sim][0]}")
+            else:
+                st.info("No simulations found. Run a simulation first.")
+        except Exception as e:
+            st.warning(f"Could not load simulations for import: {e}")
+
     # Grader
     if HAS_GRADER:
         _section("Performance Grader")
@@ -1372,14 +1438,17 @@ def _render_performance_tab():
         if st.button("Grade Performance", key="grade_run"):
             try:
                 grader = SimulationGrader()
-                result = grader.grade_simulation({
-                    "total_return": g_return,
-                    "sharpe_ratio": g_sharpe,
-                    "max_drawdown": g_maxdd,
-                    "win_rate": g_winrate,
-                    "total_decisions": g_decisions,
-                    "successful_decisions": g_successful,
-                })
+                # Fix: Use calculate_grade with correct parameter mapping
+                # Get starting capital from params if available, otherwise use default
+                starting_capital = params.get('starting_capital', 100000) if 'params' in dir() else 100000
+                result = grader.calculate_grade(
+                    total_pnl_dollars=starting_capital * g_return / 100,
+                    total_return_pct=g_return / 100,
+                    sharpe_ratio=g_sharpe,
+                    max_drawdown_pct=g_maxdd / 100,
+                    win_rate=g_winrate / 100,
+                    trade_count=g_decisions,
+                )
                 st.session_state["grade_result"] = result
             except Exception as e:
                 st.error(f"Grading error: {e}")
