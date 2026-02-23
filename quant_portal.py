@@ -467,7 +467,7 @@ def render_quant_portal():
             
             signal_col1, signal_col2 = st.columns([2, 1])
             with signal_col1:
-                signal_symbol = st.selectbox("Select Symbol for Signal", symbols)
+                signal_symbol = st.selectbox("Select Symbol for Signal", symbols, key="signal_symbol_select")
             
             if st.button("Generate Quant Signal", type="primary"):
                 with st.spinner("Running quant ensemble model..."):
@@ -523,7 +523,7 @@ def render_quant_portal():
         
         ml_col1, ml_col2, ml_col3 = st.columns(3)
         with ml_col1:
-            ml_model = st.selectbox("ML Model", ["Random Forest", "Gradient Boosting", "Linear Regression", "LSTM"])
+            ml_model = st.selectbox("ML Model", ["Random Forest", "Gradient Boosting", "Linear Regression", "LSTM"], key="ml_model_select")
         with ml_col2:
             lookback = st.slider("Lookback Period", 20, 200, 60)
         with ml_col3:
@@ -559,10 +559,10 @@ def render_quant_portal():
         regime_col1, regime_col2 = st.columns(2)
         
         with regime_col1:
-            regime_symbol = st.selectbox("Symbol", symbols if symbols else ["SPY", "QQQ", "IWM"], index=0)
+            regime_symbol = st.selectbox("Symbol", symbols if symbols else ["SPY", "QQQ", "IWM"], index=0, key="regime_symbol_select")
         
         with regime_col2:
-            regime_method = st.selectbox("Method", ["Hidden Markov Model", "Bayesian Regime Switching", "Volatility Clustering"])
+            regime_method = st.selectbox("Method", ["Hidden Markov Model", "Bayesian Regime Switching", "Volatility Clustering"], key="regime_method_select")
         
         if st.button("Detect Regimes", type="primary"):
             with st.spinner("Analyzing market regimes..."):
@@ -771,15 +771,16 @@ def render_quant_portal():
         
         bt_col1, bt_col2, bt_col3 = st.columns(3)
         with bt_col1:
-            bt_symbol = st.selectbox("Symbol", symbols if symbols else ["SPY", "AAPL", "BTC-USD"])
+            bt_symbol = st.selectbox("Symbol", symbols if symbols else ["SPY", "AAPL", "BTC-USD"], key="bt_symbol_select")
         with bt_col2:
-            bt_period = st.selectbox("Period", ["1y", "2y", "5y", "10y"])
+            bt_period = st.selectbox("Period", ["1y", "2y", "5y", "10y"], key="bt_period_select")
         with bt_col3:
             initial_capital = st.number_input("Initial Capital", value=100000, step=10000)
         
         strategy_type = st.selectbox(
             "Strategy",
-            ["Momentum", "Mean Reversion", "Breakout", "Pairs Trading", "Factor-Based"]
+            ["Momentum", "Mean Reversion", "Breakout", "Pairs Trading", "Factor-Based"],
+            key="strategy_type_select"
         )
         
         if HAS_BT and st.button("Run Backtest", type="primary"):
@@ -837,7 +838,7 @@ def render_quant_portal():
             with risk_col1:
                 conf_level = st.slider("VaR Confidence", 0.90, 0.99, 0.95)
             with risk_col2:
-                var_method = st.selectbox("Method", ["Historical", "Parametric", "Monte Carlo"])
+                var_method = st.selectbox("Method", ["Historical", "Parametric", "Monte Carlo"], key="var_method_select")
             with risk_col3:
                 time_horizon = st.slider("Time Horizon (days)", 1, 30, 10)
             
@@ -868,7 +869,7 @@ def render_quant_portal():
             with alt_col1:
                 alt_ticker = st.text_input("Ticker", value=bt_symbol if 'bt_symbol' in locals() else "AAPL")
             with alt_col2:
-                alt_source = st.selectbox("Data Source", ["Satellite", "Social Media", "Credit Cards", "Web Traffic", "Hiring"])
+                alt_source = st.selectbox("Data Source", ["Satellite", "Social Media", "Credit Cards", "Web Traffic", "Hiring"], key="alt_source_select")
             
             if st.button("Fetch Alternative Data", type="primary"):
                 with st.spinner(f"Fetching {alt_source} data..."):
