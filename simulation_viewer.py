@@ -1438,7 +1438,7 @@ def _render_performance_tab():
         if st.button("Grade Performance", key="grade_run"):
             try:
                 grader = SimulationGrader()
-                # Fix: Use calculate_grade with correct parameter mapping
+                # Use calculate_grade with correct parameter mapping
                 # Get starting capital from params if available, otherwise use default
                 starting_capital = params.get('starting_capital', 100000) if 'params' in dir() else 100000
                 result = grader.calculate_grade(
