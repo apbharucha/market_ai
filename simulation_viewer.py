@@ -1835,7 +1835,7 @@ def _render_comprehensive_sim_tab():
                     st.markdown(f"**Entry:** ${trade['entry_price']:.2f} → **Exit:** ${trade['exit_price']:.2f}")
                     st.markdown(f"**Return:** {trade['pnl_pct']:+.2f}%")
                     st.markdown(f"**Risk:** {trade.get('risk_pct', 0):.1f}% (${trade.get('risk_amount', 0):,.0f})")
-                    st.markdown(f"**Confidence:** {trade['confidence']:.0f}%")
+                    st.markdown(f"**Confidence:** {trade.get('confidence', 0):.0f}%")
                     st.markdown(f"**Grade:** {trade['grade']} ({trade.get('grade_score', 0):.1f})")
                     st.markdown(f"**Reasoning:** {trade['reasoning']}")
         
@@ -1846,7 +1846,7 @@ def _render_comprehensive_sim_tab():
                     st.markdown(f"**Entry:** ${trade['entry_price']:.2f} → **Exit:** ${trade['exit_price']:.2f}")
                     st.markdown(f"**Return:** {trade['pnl_pct']:+.2f}%")
                     st.markdown(f"**Risk:** {trade.get('risk_pct', 0):.1f}% (${trade.get('risk_amount', 0):,.0f})")
-                    st.markdown(f"**Confidence:** {trade['confidence']:.0f}%")
+                    st.markdown(f"**Confidence:** {trade.get('confidence', 0):.0f}%")
                     st.markdown(f"**Grade:** {trade['grade']} ({trade.get('grade_score', 0):.1f})")
                     st.markdown(f"**Reasoning:** {trade['reasoning']}")
         
