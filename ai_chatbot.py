@@ -5292,6 +5292,11 @@ def show_octavian_chatbot():
                         )
                     )
                     
+                    # Safely display response with error handling
+                    if not isinstance(response, dict):
+                        st.error("Unable to generate analysis. Please try a different query.")
+                        response = {'text': 'Analysis unavailable', 'charts': [], 'analysis_summary': {}, 'suggestions': []}
+                    
                     # Display enhanced response
                     st.markdown(response.get('text', 'No response generated'))
                     

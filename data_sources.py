@@ -863,6 +863,19 @@ def get_realtime_price(symbol: str):
 def get_latest_price(symbol: str):
     """Get the freshest possible price for a symbol, bypassing cache."""
     price, _ = get_realtime_price(symbol)
+    # Ensure we don't return 0 or None - return a reasonable default
+    if price is None or price <= 0:
+        # Try to get from stock info as last resort
+        try:
+            import yfinance as yf
+            tk = yf.Ticker(symbol)
+            info = tk.info
+            price = info.get('currentPrice') or info.get('regularMarketPrice') or info.get('previousClose')
+            if price and price > 0:
+                return float(price)
+        except:
+            pass
+        return 0.0  # Return 0 only as last resort
     return price
 
 
