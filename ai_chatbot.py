@@ -1101,6 +1101,8 @@ class OctavianEnhancedChatbot:
         recommendation_style = get_recommendation_style()
         
         for symbol, analysis in symbol_analyses.items():
+            if not isinstance(analysis, dict):
+                continue  # Skip invalid analysis entries
             unbiased_analysis = analysis.get('unbiased_analysis')
             if not unbiased_analysis:
                 continue

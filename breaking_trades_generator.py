@@ -233,8 +233,12 @@ class BreakingTradesGenerator:
 
         # Volatility
         if len(prices) >= 21:
-            returns = np.diff(prices[-20:]) / prices[-20:-1]
-            indicators['volatility'] = float(np.std(returns) * np.sqrt(252))
+            price_slice = prices[-20:]
+            if len(price_slice) > 1:
+                returns = np.diff(price_slice) / price_slice[:-1]
+                indicators['volatility'] = float(np.std(returns) * np.sqrt(252))
+            else:
+                indicators['volatility'] = 0.20
         else:
             indicators['volatility'] = 0.20
 

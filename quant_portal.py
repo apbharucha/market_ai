@@ -352,6 +352,7 @@ def render_quant_portal():
             with st.spinner("Loading market data..."):
                 try:
                     data = {}
+                    returns_df = None  # Initialize returns_df to avoid undefined variable error
                     for sym in symbols:
                         try:
                             df = get_stock(sym, period="1y")
@@ -376,6 +377,8 @@ def render_quant_portal():
                         if returns_data:
                             returns_df = pd.DataFrame(returns_data)
                             total_returns = ((1 + returns_df) - 1).tail(1).iloc[0]
+                        else:
+                            returns_df = None
                             
                             # Display returns
                             cols = st.columns(min(len(total_returns), 6))

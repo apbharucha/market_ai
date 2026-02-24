@@ -253,6 +253,19 @@ def _metric_card(label: str, value: str, color: str = "#e8eaf0"):
 # TAB 1 — Market Microstructure Simulation
 # ══════════════════════════════════════════════════════════════════════════════
 
+# Microanimation helpers for replacing emojis
+def _check_icon():
+    """CSS checkmark icon — replaces ✓"""
+    return '<span class="oct-check-icon"></span>'
+
+def _cross_icon():
+    """CSS cross icon — replaces ✗"""
+    return '<span class="oct-cross-icon"></span>'
+
+def _arrow_icon():
+    """CSS arrow icon — replaces →"""
+    return '<span class="oct-arrow-icon"></span>'
+
 def _render_microstructure_tab():
     _section("Agent-Based Market Microstructure Simulation")
     st.caption(
@@ -488,8 +501,8 @@ def _render_portfolio_evolution_tab():
         st.info("Configure parameters and click 'Run Monte Carlo Simulation'.")
         return
 
-    n_steps_total = st.session_state["pe_n_steps"]
-    initial_capital = st.session_state["pe_initial"]
+    n_steps_total = st.session_state.get("pe_n_steps", 252)
+    initial_capital = st.session_state.get("pe_initial", 100000)
     x_axis = np.linspace(0, horizon_years, n_steps_total + 1)
 
     # ── Summary stats ──────────────────────────────────────────────────────────
@@ -957,7 +970,8 @@ def _render_universe_tab():
             st.session_state["univ_paths"] = paths
             st.session_state["univ_names"] = asset_names
             st.session_state["univ_events"] = events_log
-            st.session_state["univ_regime"] = macro_regime
+            # Store regime with different key to avoid conflict with widget key
+            st.session_state["univ_regime_value"] = macro_regime
             st.success(f"Generated {n_assets}-asset universe over {n_steps} steps in {macro_regime} regime.")
 
     paths = st.session_state.get("univ_paths")
@@ -965,9 +979,9 @@ def _render_universe_tab():
         st.info("Configure the universe and click 'Generate Synthetic Universe'.")
         return
 
-    asset_names = st.session_state["univ_names"]
-    events_log = st.session_state["univ_events"]
-    macro_regime = st.session_state["univ_regime"]
+    asset_names = st.session_state.get("univ_names", [])
+    events_log = st.session_state.get("univ_events", [])
+    macro_regime = st.session_state.get("univ_regime_value", "Bull Market")
     n_steps = paths.shape[1] - 1
 
     # ── Asset price paths ──────────────────────────────────────────────────────
@@ -1673,7 +1687,9 @@ def _render_comprehensive_sim_tab():
             with st.spinner(f"Running {params['duration_minutes']//60}h simulation with {len(universe)} tickers..."):
                 try:
                     # Simulate comprehensive trading across all tickers
-                    np.random.seed(42)
+                    # Use time-based seed for truly random results each run
+                    import time
+                    np.random.seed(int(time.time() * 1000) % 2**32)
                     
                     # Generate trades across universe - make fully dynamic based on capital and duration
                     # Scale trades based on capital and duration for realistic simulation
@@ -1971,35 +1987,35 @@ def _render_comprehensive_sim_tab():
         
         # Win rate analysis
         if win_rate > 55:
-            insights.append(f"✓ Strong overall win rate of {win_rate:.1f}% - model showing good accuracy")
+            insights.append(f"{_check_icon()} Strong overall win rate of {win_rate:.1f}% - model showing good accuracy")
         elif win_rate > 50:
-            insights.append(f"→ Moderate win rate of {win_rate:.1f}% - model slightly profitable")
+            insights.append(f"{_arrow_icon()} Moderate win rate of {win_rate:.1f}% - model slightly profitable")
         else:
-            insights.append(f"✗ Weak win rate of {win_rate:.1f}% - model needs improvement")
+            insights.append(f"{_cross_icon()} Weak win rate of {win_rate:.1f}% - model needs improvement")
         
         # Direction analysis
         if long_win_rate > short_win_rate + 10:
-            insights.append(f"✓ Long positions performing significantly better ({long_win_rate:.1f}% vs {short_win_rate:.1f}%)")
+            insights.append(f"{_check_icon()} Long positions performing significantly better ({long_win_rate:.1f}% vs {short_win_rate:.1f}%)")
         elif short_win_rate > long_win_rate + 10:
-            insights.append(f"✓ Short positions performing significantly better ({short_win_rate:.1f}% vs {long_win_rate:.1f}%)")
+            insights.append(f"{_check_icon()} Short positions performing significantly better ({short_win_rate:.1f}% vs {long_win_rate:.1f}%)")
         else:
-            insights.append(f"→ Direction balance is even - both long ({long_win_rate:.1f}%) and short ({short_win_rate:.1f}%)")
+            insights.append(f"{_arrow_icon()} Direction balance is even - both long ({long_win_rate:.1f}%) and short ({short_win_rate:.1f}%)")
         
         # Confidence analysis
         if high_conf_wr > med_conf_wr + 15:
-            insights.append(f"✓ High confidence trades ({high_conf_wr:.1f}%) significantly outperform medium confidence ({med_conf_wr:.1f}%)")
-            insights.append("  → Recommendation: Increase position sizing on high-confidence signals")
+            insights.append(f"{_check_icon()} High confidence trades ({high_conf_wr:.1f}%) significantly outperform medium confidence ({med_conf_wr:.1f}%)")
+            insights.append(f"  {_arrow_icon()} Recommendation: Increase position sizing on high-confidence signals")
         elif low_conf_wr > high_conf_wr:
-            insights.append("✗ Low confidence trades outperforming high confidence - model confidence calibration issues")
-            insights.append("  → Recommendation: Review confidence scoring methodology")
+            insights.append(f"{_cross_icon()} Low confidence trades outperforming high confidence - model confidence calibration issues")
+            insights.append(f"  {_arrow_icon()} Recommendation: Review confidence scoring methodology")
         
         # Risk/Reward analysis
         if avg_win > abs(avg_loss) * 1.5:
-            insights.append(f"✓ Excellent risk/reward - avg win ${avg_win:,.0f} vs avg loss ${avg_loss:,.0f}")
+            insights.append(f"{_check_icon()} Excellent risk/reward - avg win ${avg_win:,.0f} vs avg loss ${avg_loss:,.0f}")
         elif avg_win > abs(avg_loss):
-            insights.append(f"→ Positive risk/reward - avg win ${avg_win:,.0f} vs avg loss ${avg_loss:,.0f}")
+            insights.append(f"{_arrow_icon()} Positive risk/reward - avg win ${avg_win:,.0f} vs avg loss ${avg_loss:,.0f}")
         else:
-            insights.append(f"✗ Poor risk/reward - avg win ${avg_win:,.0f} vs avg loss ${avg_loss:,.0f}")
+            insights.append(f"{_cross_icon()} Poor risk/reward - avg win ${avg_win:,.0f} vs avg loss ${avg_loss:,.0f}")
         
         # Display insights
         for insight in insights:
@@ -2028,7 +2044,7 @@ def _render_comprehensive_sim_tab():
             recommendations.append("6. **Signal Generation**: Model generating too few high-confidence signals - relax thresholds or improve algorithms")
         
         if not recommendations:
-            recommendations.append("✓ Model performing well across all metrics - continue current approach")
+            recommendations.append(f"{_check_icon()} Model performing well across all metrics - continue current approach")
         
         for rec in recommendations:
             st.markdown(rec)

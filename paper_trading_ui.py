@@ -1067,7 +1067,7 @@ def show_paper_trading():
         has_engine = False
 
     symbol_raw = st.text_input(
-        "Symbol", value=st.session_state.get("pt_symbol_val", "AAPL"),
+        "Symbol", value=st.session_state.get("pt_symbol_value", "AAPL"),
         key="pt_symbol_input",
         help="Stocks: AAPL | Forex: USD/JPY or USDJPY=X | Futures: ES=F | Crypto: BTC-USD",
     )
@@ -1075,7 +1075,8 @@ def show_paper_trading():
     if not symbol:
         st.info("Enter a symbol to begin paper trading.")
         return
-    st.session_state["pt_symbol_val"] = symbol
+    # Use different key to avoid conflict with widget key
+    st.session_state["pt_symbol_value"] = symbol
 
     asset_type = _detect_asset_type(symbol)
     st.caption(f"Asset type: {asset_type.upper()} | Symbol: {symbol}")

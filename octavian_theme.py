@@ -247,6 +247,19 @@ def _get_theme_css() -> str:
     .oct-cross-icon::before {{ transform: translateY(-50%) rotate(45deg); }}
     .oct-cross-icon::after  {{ transform: translateY(-50%) rotate(-45deg); }}
 
+    /* Arrow icon — replaces → */
+    .oct-arrow-icon {{
+        display: inline-block;
+        width: 8px;
+        height: 8px;
+        border-right: 2px solid #64b5f6;
+        border-bottom: 2px solid #64b5f6;
+        transform: rotate(-45deg) translateX(1px);
+        margin: 0 3px;
+        vertical-align: middle;
+        flex-shrink: 0;
+    }}
+
     /* Plus icon — replaces ✦ opportunity marker */
     .oct-plus-icon {{
         display: inline-block;
