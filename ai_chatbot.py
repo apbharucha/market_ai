@@ -926,7 +926,7 @@ class OctavianEnhancedChatbot:
         """Generate UNBIASED symbol analysis focused on PROFIT POTENTIAL."""
         
         unbiased_analysis = analysis.get('unbiased_analysis')
-        if not unbiased_analysis:
+        if not unbiased_analysis or not isinstance(unbiased_analysis, dict):
             return f"##  {symbol} - Analysis Failed\nInsufficient data for unbiased analysis.\n"
         
         profit_probability = unbiased_analysis.profit_probability
@@ -981,7 +981,7 @@ class OctavianEnhancedChatbot:
         
         # Timeframe-specific insights
         timeframe_analysis = analysis.get('timeframe_analysis')
-        if timeframe_analysis and not timeframe_analysis.current_context.get('error'):
+        if timeframe_analysis and isinstance(timeframe_analysis, dict) and not timeframe_analysis.current_context.get('error'):
             text += f"###  {timeframe_scope.value.replace('_', ' ').title()} Specific Insights\n"
             
             actionable_insights = timeframe_analysis.actionable_insights
@@ -999,7 +999,7 @@ class OctavianEnhancedChatbot:
         
         # Source-weighted news (if available)
         credibility_news = analysis.get('credibility_weighted_news', {})
-        if credibility_news and not credibility_news.get('error'):
+        if credibility_news and isinstance(credibility_news, dict) and not credibility_news.get('error'):
             text += "###  Credibility-Weighted News Impact\n"
             
             weighted_sentiment = credibility_news.get('weighted_sentiment', 0)

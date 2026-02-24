@@ -442,7 +442,7 @@ if selection == "Dashboard":
                             f'<div style="background:#0d1117;padding:12px;border-radius:6px;margin:5px 0;">'
                             f'<div style="color:#aaa;font-size:0.8rem;">STOP LOSS</div>'
                             f'<div style="color:#ff4444;font-size:1.3rem;font-weight:700;">${trade.stop_loss:,.2f}</div>'
-                            f'<div style="color:#888;font-size:0.75rem;">Risk: {abs((trade.entry_price - trade.stop_loss) / trade.entry_price * 100):.1f}%</div>'
+                            f'<div style="color:#888;font-size:0.75rem;">Risk: {abs((trade.entry_price - trade.stop_loss) / trade.entry_price * 100) if trade.entry_price != 0 else 0:.1f}%</div>'
                             f"</div>",
                             unsafe_allow_html=True,
                         )
@@ -453,7 +453,7 @@ if selection == "Dashboard":
                             f'<div style="background:#0d1117;padding:12px;border-radius:6px;margin:5px 0;">'
                             f'<div style="color:#aaa;font-size:0.8rem;">TARGET 1 (Scale 30%)</div>'
                             f'<div style="color:#00ff00;font-size:1.3rem;font-weight:700;">${trade.take_profit_1:,.2f}</div>'
-                            f'<div style="color:#888;font-size:0.75rem;">+{abs((trade.take_profit_1 - trade.entry_price) / trade.entry_price * 100):.1f}%</div>'
+                            f'<div style="color:#888;font-size:0.75rem;">+{abs((trade.take_profit_1 - trade.entry_price) / trade.entry_price * 100) if trade.entry_price != 0 else 0:.1f}%</div>'
                             f"</div>",
                             unsafe_allow_html=True,
                         )
@@ -463,7 +463,7 @@ if selection == "Dashboard":
                                 f'<div style="background:#0d1117;padding:12px;border-radius:6px;margin:5px 0;">'
                                 f'<div style="color:#aaa;font-size:0.8rem;">TARGET 2 (Scale 40%)</div>'
                                 f'<div style="color:#00ff00;font-size:1.3rem;font-weight:700;">${trade.take_profit_2:,.2f}</div>'
-                                f'<div style="color:#888;font-size:0.75rem;">+{abs((trade.take_profit_2 - trade.entry_price) / trade.entry_price * 100):.1f}%</div>'
+                                f'<div style="color:#888;font-size:0.75rem;">+{abs((trade.take_profit_2 - trade.entry_price) / trade.entry_price * 100) if trade.entry_price != 0 else 0:.1f}%</div>'
                                 f"</div>",
                                 unsafe_allow_html=True,
                             )
