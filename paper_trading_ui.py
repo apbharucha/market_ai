@@ -238,7 +238,16 @@ def _get_live_price(symbol: str) -> float:
     try:
         tk = yf.Ticker(yf_sym)
         
-        # Method 1: Try intraday 1-minute data for most accurate price
+        # Method 1: Try fast_info first (most reliable)
+        try:
+            info = tk.fast_info
+            price = getattr(info, 'last_price', None) or getattr(info, 'regularMarketPrice', None)
+            if price and price > 0:
+                return float(price)
+        except Exception:
+            pass
+        
+        # Method 2: Try intraday 1-minute data for most accurate price
         try:
             df_1m = tk.history(period="1d", interval="1m")
             if df_1m is not None and not df_1m.empty:
@@ -254,15 +263,6 @@ def _get_live_price(symbol: str) -> float:
         except Exception:
             pass
         
-        # Method 2: Try fast_info
-        try:
-            info = tk.fast_info
-            price = getattr(info, 'last_price', None) or getattr(info, 'regularMarketPrice', None)
-            if price and price > 0:
-                return float(price)
-        except Exception:
-            pass
-        
         # Method 3: Fallback to recent daily data
         df = tk.history(period="5d")
         if df is not None and not df.empty:
@@ -275,18 +275,20 @@ def _get_live_price(symbol: str) -> float:
                 close = close.dropna().astype(float)
                 if len(close) > 0:
                     return float(close.iloc[-1])
-    except Exception:
+                    
+    except Exception as e:
+        print(f"Error fetching price for {symbol}: {e}")
         pass
 
-    # Final fallback: use _fetch_data
-    df = _fetch_data(sym, period="5d")
-    if df is not None and not df.empty and "Close" in df.columns:
-        close = df["Close"]
-        if isinstance(close, pd.DataFrame):
-            close = close.iloc[:, 0]
-        close = close.dropna().astype(float)
-        if len(close) > 0:
-            return float(close.iloc[-1])
+    # Final fallback: try using the symbol directly as-is
+    try:
+        tk = yf.Ticker(sym)
+        info = tk.info
+        price = info.get('currentPrice') or info.get('regularMarketPrice')
+        if price and price > 0:
+            return float(price)
+    except:
+        pass
 
     return 0.0
 

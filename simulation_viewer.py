@@ -907,7 +907,7 @@ def _render_universe_tab():
             macro_regime = st.selectbox(
                 "Macro Regime",
                 ["Bull Market", "Bear Market", "Sideways", "High Volatility", "Crisis"],
-                key="univ_regime",
+                index=0,
             )
             correlation_level = st.slider("Asset Correlation", 0, 100, 40, key="univ_corr") / 100
         with c3:

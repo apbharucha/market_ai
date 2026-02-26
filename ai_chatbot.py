@@ -5295,19 +5295,32 @@ def show_octavian_chatbot():
                     # Safely display response with error handling
                     if not isinstance(response, dict):
                         st.error("Unable to generate analysis. Please try a different query.")
-                        response = {'text': 'Analysis unavailable', 'charts': [], 'analysis_summary': {}, 'suggestions': []}
+                        response = {'text': 'Analysis unavailable. Please try rephrasing your question.', 'charts': [], 'analysis_summary': {}, 'suggestions': []}
+                    else:
+                        # Ensure all expected keys exist
+                        response.setdefault('text', 'Analysis completed but no detailed response available.')
+                        response.setdefault('charts', [])
+                        response.setdefault('analysis_summary', {})
+                        response.setdefault('suggestions', [])
+                        
+                except Exception as e:
+                    st.error(f"Octavian encountered an error: {str(e)[:100]}")
+                    response = {'text': f'Analysis failed: {str(e)[:200]}. Please try rephrasing your question.', 'charts': [], 'analysis_summary': {}, 'suggestions': []}
                     
                     # Display enhanced response
                     st.markdown(response.get('text', 'No response generated'))
                     
-                    # Display charts
-                    charts = response.get('charts', [])
-                    if charts:
-                        st.markdown(f"** Octavian Generated {len(charts)} Chart{'s' if len(charts) > 1 else ''}:**")
-                        
-                        for chart_data in charts:
-                            if 'figure' in chart_data and chart_data['figure'] is not None:
-                                st.plotly_chart(chart_data['figure'], use_container_width=True)
+                    # Display charts with error handling
+                    try:
+                        charts = response.get('charts', [])
+                        if charts:
+                            st.markdown(f"** Octavian Generated {len(charts)} Chart{'s' if len(charts) > 1 else ''}:**")
+                            
+                            for chart_data in charts:
+                                if 'figure' in chart_data and chart_data['figure'] is not None:
+                                    st.plotly_chart(chart_data['figure'], use_container_width=True)
+                    except Exception as e:
+                        st.warning("Some charts could not be displayed.")
                     
                     # Show enhanced analysis summary
                     if response.get('analysis_summary'):
