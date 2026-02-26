@@ -716,12 +716,26 @@ class OctavianEnhancedChatbot:
 
             def _ret_5d(sym: str) -> float | None:
                 try:
+                    # Get chart timeframe from settings
+                    chart_settings = st.session_state.get('chart_settings', {})
+                    chart_period = chart_settings.get('chart_timeframe', '6 Months')
+                    
+                    # Convert display period to yfinance period
+                    period_map = {
+                        '1 Month': '1mo',
+                        '3 Months': '3mo', 
+                        '6 Months': '6mo',
+                        '1 Year': '1y',
+                        '2 Years': '2y'
+                    }
+                    period = period_map.get(chart_period, '6mo')
+                    
                     if sym in ("EUR_USD", "USD_JPY"):
                         df = get_fx(sym)
                     elif "=F" in sym or sym.endswith("=f"):
-                        df = get_futures_proxy(sym, period="6mo")
+                        df = get_futures_proxy(sym, period=period)
                     else:
-                        df = get_stock(sym, period="6mo")
+                        df = get_stock(sym, period=period)
                     if df is None or df.empty or "Close" not in df.columns or len(df) < 6:
                         return None
                     close = df["Close"]
@@ -2302,6 +2316,19 @@ class OctavianEnhancedChatbot:
     
     def _create_comparison_chart(self, symbols: List[str], period: str = '6mo') -> go.Figure:
         """Create a comparison chart for multiple symbols."""
+        # Get chart timeframe from settings
+        chart_settings = st.session_state.get('chart_settings', {})
+        chart_period = chart_settings.get('chart_timeframe', '6 Months')
+        
+        # Convert display period to yfinance period
+        period_map = {
+            '1 Month': '1mo',
+            '3 Months': '3mo', 
+            '6 Months': '6mo',
+            '1 Year': '1y',
+            '2 Years': '2y'
+        }
+        period = period_map.get(chart_period, '6mo')
         fig = go.Figure()
         colors = ['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd']
         
@@ -5193,6 +5220,40 @@ def show_octavian_chatbot():
             index=0,
             help="Override automatic timeframe detection"
         )
+        
+        # Chart display preferences
+        st.markdown("####  Chart Display")
+        
+        # Price units
+        price_unit = st.selectbox(
+            "Price Display",
+            ["Auto", "Dollars ($)", "Percent (%)", "Points"],
+            index=0,
+            help="Choose how to display price values on charts"
+        )
+        
+        # Volume display
+        volume_display = st.checkbox(
+            "Show Volume",
+            value=True,
+            help="Display volume bars on price charts"
+        )
+        
+        # Chart timeframe
+        chart_timeframe = st.selectbox(
+            "Chart Period",
+            ["1 Month", "3 Months", "6 Months", "1 Year", "2 Years"],
+            index=2,
+            help="Default chart time period"
+        )
+        
+        # Store chart settings in session state for use in chart generation
+        st.session_state['chart_settings'] = {
+            'price_unit': price_unit,
+            'volume_display': volume_display,
+            'chart_timeframe': chart_timeframe,
+            'analysis_depth': analysis_depth
+        }
         
         if st.button(" Clear Octavian History"):
             st.session_state.octavian_chat_history = []
